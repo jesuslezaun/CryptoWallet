@@ -16,5 +16,5 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
 
-    - name: Run grumphp
+    - name: Run tests
       run: composer run-script test
