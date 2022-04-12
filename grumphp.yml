@@ -1,0 +1,23 @@
+grumphp:
+    ascii: ~
+    tasks:
+        phpunit:
+            config_file: null
+            always_execute: true
+        phpcs:
+            standard: PSR12
+            triggered_by: [php]
+        phpcsfixer:
+            allow_risky: true
+            using_cache: true
+            config: '.php-cs-fixer.php'
+            verbose: true
+        phpmd:
+            whitelist_patterns: [ ]
+            exclude: [ ]
+            report_format: text
+            ruleset: ['codesize', 'naming' ]
+            triggered_by: ['php']
+    fixer:
+        enabled: true
+        fix_by_default: true
