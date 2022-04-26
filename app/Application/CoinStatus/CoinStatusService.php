@@ -23,12 +23,12 @@ class CoinStatusService
     }
 
     /**
-     * @param int $coinId
+     * @param string $coinId
      * @return CoinStatus
      * @throws Exception
      */
-    public function getCoinStatus(int $coinId): CoinStatus
+    public function getCoinStatus(string $coinId): CoinStatus
     {
-        return $this->cryptoDataSource->findCoinByID($coinId);
+        return $this->cryptoDataSource->findCoinStatusById($coinId);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\app\Infrastructure\Controller;
+namespace Tests\App\Infrastructure\Controller;
 
 use App\Application\CryptoDataSource\CryptoDataSource;
 use App\Domain\Coin;
@@ -31,7 +31,7 @@ class CoinStatusControllerTest extends TestCase
     public function coinNotFoundForGivenId()
     {
         $this->cryptoDataSource
-            ->expects('findCoinById')
+            ->expects('findCoinStatusById')
             ->with('999')
             ->once()
             ->andThrow(new Exception('A coin with the specified id was not found'));
@@ -49,7 +49,7 @@ class CoinStatusControllerTest extends TestCase
     public function serviceIsUnavailable()
     {
         $this->cryptoDataSource
-            ->expects('findCoinById')
+            ->expects('findCoinStatusById')
             ->with('2')
             ->once()
             ->andThrow(new Exception('Service unavailable'));
@@ -69,7 +69,7 @@ class CoinStatusControllerTest extends TestCase
         $coinStatus = new CoinStatus("90", "BTC", "Bitcoin", "bitcoin", 1, "601");
 
         $this->cryptoDataSource
-            ->expects('findCoinById')
+            ->expects('findCoinStatusById')
             ->with('90')
             ->once()
             ->andReturn($coinStatus);

@@ -6,5 +6,5 @@ use App\Domain\CoinStatus;
 
 interface CryptoDataSource
 {
-    public function findCoinById(int $coinId): CoinStatus;
+    public function findCoinStatusById(string $coinId): CoinStatus;
 }

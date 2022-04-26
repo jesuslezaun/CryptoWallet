@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\app\Application\CoinStatus;
+namespace Tests\App\Application\CoinStatus;
 
 use App\Application\CoinStatus\CoinStatusService;
 use App\Application\CryptoDataSource\CryptoDataSource;
@@ -35,7 +35,7 @@ class CoinStatusServiceTest extends TestCase
         $coinId = "999";
 
         $this->cryptoDataSource
-            ->expects('findCoinById')
+            ->expects('findCoinStatusById')
             ->with($coinId)
             ->once()
             ->andThrow(new Exception('A coin with the specified id was not found'));
@@ -53,7 +53,7 @@ class CoinStatusServiceTest extends TestCase
         $coinId = "1";
 
         $this->cryptoDataSource
-            ->expects('findCoinById')
+            ->expects('findCoinStatusById')
             ->with($coinId)
             ->once()
             ->andThrow(new Exception('Service unavailable'));
@@ -71,13 +71,13 @@ class CoinStatusServiceTest extends TestCase
         $coinStatus = new CoinStatus("90", "BTC", "Bitcoin", "bitcoin", 1, "600");
 
         $this->cryptoDataSource
-            ->expects('findCoinById')
+            ->expects('findCoinStatusById')
             ->with("90")
             ->once()
             ->andReturn($coinStatus);
 
-        $coinStatusService = $this->coinStatusService->getCoinStatus("90");
+        $responseCoinStatus = $this->coinStatusService->getCoinStatus("90");
 
-        $this->assertEquals($coinStatus, $coinStatusService);
+        $this->assertEquals($coinStatus, $responseCoinStatus);
     }
 }
