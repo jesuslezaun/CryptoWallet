@@ -58,4 +58,20 @@ class WalletCryptocurrenciesControllerTest extends TestCase
             ->assertStatus(Response::HTTP_SERVICE_UNAVAILABLE)
             ->assertExactJson(['error' => 'Service unavailable']);
     }
+
+    /**
+     * @test
+     */
+    public function walletIsEmpty()
+    {
+        $this->cryptoDataSource
+            ->expects('findWalletCryptocurrenciesById')
+            ->with('2')
+            ->once()
+            ->andReturn([]);
+
+        $response = $this->get('/api/wallet/2');
+
+        $response->assertStatus(Response::HTTP_OK)->assertExactJson([]);
+    }
 }

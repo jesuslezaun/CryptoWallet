@@ -33,5 +33,7 @@ class WalletCryptocurrenciesController
                 'error' => $exception->getMessage()
             ], Response::HTTP_NOT_FOUND);
         }
+
+        return response()->json([]);
     }
 }

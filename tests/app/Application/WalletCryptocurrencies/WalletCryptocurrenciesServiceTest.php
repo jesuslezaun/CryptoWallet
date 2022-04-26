@@ -23,7 +23,7 @@ class WalletCryptocurrenciesServiceTest extends TestCase
 
         $this->cryptoDataSource = Mockery::mock(CryptoDataSource::class);
 
-        $this->walletCryptocurrenciesService = new WalletCryptocurrenciesService($this->cryptoDataSource);
+        $this->walletCryptoService = new WalletCryptocurrenciesService($this->cryptoDataSource);
     }
 
     /**
@@ -41,7 +41,7 @@ class WalletCryptocurrenciesServiceTest extends TestCase
 
         $this->expectException(Exception::class);
 
-        $this->walletCryptocurrenciesService->getWalletCryptocurrencies($wallet_id);
+        $this->walletCryptoService->getWalletCryptocurrencies($wallet_id);
     }
 
     /**
@@ -59,6 +59,25 @@ class WalletCryptocurrenciesServiceTest extends TestCase
 
         $this->expectException(Exception::class);
 
-        $this->walletCryptocurrenciesService->getWalletCryptocurrencies($wallet_id);
+        $this->walletCryptoService->getWalletCryptocurrencies($wallet_id);
+    }
+
+    /**
+     * @test
+     * @throws Exception
+     */
+    public function walletItEmpty()
+    {
+        $wallet_id = "2";
+
+        $this->cryptoDataSource
+            ->expects('findWalletCryptocurrenciesById')
+            ->with($wallet_id)
+            ->once()
+            ->andReturn([]);
+
+        $walletCoins = $this->walletCryptoService->getWalletCryptocurrencies($wallet_id);
+
+        $this->assertEquals([], $walletCoins);
     }
 }
