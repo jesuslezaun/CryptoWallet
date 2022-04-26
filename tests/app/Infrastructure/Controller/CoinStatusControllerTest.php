@@ -50,11 +50,11 @@ class CoinStatusControllerTest extends TestCase
     {
         $this->cryptoDataSource
             ->expects('findCoinById')
-            ->with('1')
+            ->with('2')
             ->once()
             ->andThrow(new Exception('Service unavailable'));
 
-        $response = $this->get('/api/coin/status/1');
+        $response = $this->get('/api/coin/status/2');
 
         $response
             ->assertStatus(Response::HTTP_SERVICE_UNAVAILABLE)
