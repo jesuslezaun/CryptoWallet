@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Application\CoinStatus;
+namespace App\Application\WalletCryptocurrencies;
 
 use App\Application\CryptoDataSource\CryptoDataSource;
-use App\Domain\CoinStatus;
+use App\Domain\Wallet;
 use Exception;
 
-class CoinStatusService
+class WalletCryptocurrenciesService
 {
     /**
      * @var CryptoDataSource
@@ -14,7 +14,7 @@ class CoinStatusService
     private CryptoDataSource $cryptoDataSource;
 
     /**
-     * CoinStatusService constructor.
+     * WalletCryptocurrenciesService constructor.
      * @param CryptoDataSource $cryptoDataSource
      */
     public function __construct(CryptoDataSource $cryptoDataSource)
@@ -23,12 +23,12 @@ class CoinStatusService
     }
 
     /**
-     * @param string $coinId
-     * @return CoinStatus
+     * @param string $wallet_id
+     * @return array
      * @throws Exception
      */
-    public function getCoinStatus(string $coinId): CoinStatus
+    public function getWalletCryptocurrencies(string $wallet_id): array
     {
-        return $this->cryptoDataSource->findCoinStatusById($coinId);
+        return $this->cryptoDataSource->findWalletCryptocurrenciesById($wallet_id);
     }
 }

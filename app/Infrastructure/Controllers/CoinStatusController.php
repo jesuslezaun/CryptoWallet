@@ -20,7 +20,7 @@ class CoinStatusController
         $this->coinStatusService = $coinStatusService;
     }
 
-    public function __invoke(int $coinId): JsonResponse
+    public function __invoke(string $coinId): JsonResponse
     {
         try {
             $coinStatus = $this->coinStatusService->getCoinStatus($coinId);
