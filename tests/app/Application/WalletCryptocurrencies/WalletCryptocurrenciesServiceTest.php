@@ -43,4 +43,22 @@ class WalletCryptocurrenciesServiceTest extends TestCase
 
         $this->walletCryptocurrenciesService->getWalletCryptocurrencies($wallet_id);
     }
+
+    /**
+     * @test
+     */
+    public function serviceIsUnavailable()
+    {
+        $wallet_id = "1";
+
+        $this->cryptoDataSource
+            ->expects('findWalletCryptocurrenciesById')
+            ->with($wallet_id)
+            ->once()
+            ->andThrow(new Exception('Service unavailable'));
+
+        $this->expectException(Exception::class);
+
+        $this->walletCryptocurrenciesService->getWalletCryptocurrencies($wallet_id);
+    }
 }
