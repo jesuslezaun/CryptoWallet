@@ -1,5 +1,6 @@
 <?php
 
+use App\Infrastructure\Controllers\CoinStatusController;
 use App\Infrastructure\Controllers\GetUserController;
 use App\Infrastructure\Controllers\IsEarlyAdopterUserController;
 use App\Infrastructure\Controllers\StatusController;
@@ -27,3 +28,5 @@ Route::get(
 
 Route::get('user/{email}', IsEarlyAdopterUserController::class);
 Route::get('user/id/{userId}', GetUserController::class);
+
+Route::get('coin/status/{coin_id}', CoinStatusController::class);
