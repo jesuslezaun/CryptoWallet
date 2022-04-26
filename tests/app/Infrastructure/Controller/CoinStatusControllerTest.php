@@ -66,7 +66,7 @@ class CoinStatusControllerTest extends TestCase
      */
     public function getCoinStatusForGivenId()
     {
-        $coinStatus = new CoinStatus("90", "BTC", "Bitcoin", "bitcoin", 1, "600");
+        $coinStatus = new CoinStatus("90", "BTC", "Bitcoin", "bitcoin", 1, "601");
 
         $this->cryptoDataSource
             ->expects('findCoinById')
@@ -79,6 +79,6 @@ class CoinStatusControllerTest extends TestCase
         $response
             ->assertStatus(Response::HTTP_OK)
             ->assertExactJson(['coin_id' => "90", 'symbol' => 'BTC', 'name' => 'Bitcoin',
-                'name_id' => 'bitcoin', 'rank' => 1, 'price_usd' => '600']);
+                'name_id' => 'bitcoin', 'rank' => 1, 'price_usd' => '601']);
     }
 }
