@@ -42,4 +42,22 @@ class WalletBalanceControllerTest extends TestCase
             ->assertStatus(Response::HTTP_NOT_FOUND)
             ->assertExactJson(['error' => 'A wallet with the specified id was not found']);
     }
+
+    /**
+     * @test
+     */
+    public function serviceIsUnavailable()
+    {
+        $this->cryptoDataStorage
+            ->expects('getWalletById')
+            ->with('2')
+            ->once()
+            ->andThrow(new Exception('Service unavailable'));
+
+        $response = $this->get('/api/wallet/2/balance');
+
+        $response
+            ->assertStatus(Response::HTTP_SERVICE_UNAVAILABLE)
+            ->assertExactJson(['error' => 'Service unavailable']);
+    }
 }

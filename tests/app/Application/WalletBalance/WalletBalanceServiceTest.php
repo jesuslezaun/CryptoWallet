@@ -3,16 +3,16 @@
 namespace Tests\App\Application\Balance;
 
 use App\Application\CryptoDataStorage\CryptoDataStorage;
+use App\Application\WalletBalance\WalletBalanceService;
 use App\Domain\Coin;
 use App\Domain\Wallet;
 use Exception;
 use Mockery;
 use PHPUnit\Framework\TestCase;
-use App\Application\WalletCryptocurrencies\WalletCryptocurrenciesService;
 
-class WalletBalanceTest extends TestCase
+class WalletBalanceServiceTest extends TestCase
 {
-    private WalletCryptocurrenciesService $walletCryptoService;
+    private WalletBalanceService $walletBalanceService;
     private CryptoDataStorage $cryptoDataStorage;
 
     /**
@@ -24,7 +24,7 @@ class WalletBalanceTest extends TestCase
 
         $this->cryptoDataStorage = Mockery::mock(CryptoDataStorage::class);
 
-        $this->walletCryptoService = new WalletCryptocurrenciesService($this->cryptoDataStorage);
+        $this->walletBalanceService = new WalletBalanceService($this->cryptoDataStorage);
     }
 
     /**
@@ -42,6 +42,24 @@ class WalletBalanceTest extends TestCase
 
         $this->expectException(Exception::class);
 
-        $this->walletCryptoService->getWalletCryptocurrencies($wallet_id);
+        $this->walletBalanceService->getWalletBalance($wallet_id);
+    }
+
+    /**
+     * @test
+     */
+    public function serviceIsUnavailable()
+    {
+        $wallet_id = "1";
+
+        $this->cryptoDataStorage
+            ->expects('getWalletById')
+            ->with($wallet_id)
+            ->once()
+            ->andThrow(new Exception('Service unavailable'));
+
+        $this->expectException(Exception::class);
+
+        $this->walletBalanceService->getWalletBalance($wallet_id);
     }
 }
