@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Application\WalletCryptocurrencies;
+namespace App\Application\WalletBalance;
 
 use App\Application\CryptoDataStorage\CryptoDataStorage;
 use Exception;
 
-class WalletCryptocurrenciesService
+class WalletBalanceService
 {
     /**
      * @var CryptoDataStorage
@@ -13,7 +13,7 @@ class WalletCryptocurrenciesService
     private CryptoDataStorage $cryptoDataStorage;
 
     /**
-     * WalletCryptocurrenciesService constructor.
+     * WalletBalanceService constructor.
      * @param CryptoDataStorage $cryptoDataStorage
      */
     public function __construct(CryptoDataStorage $cryptoDataStorage)
@@ -23,12 +23,12 @@ class WalletCryptocurrenciesService
 
     /**
      * @param string $wallet_id
-     * @return array
+     * @return float
      * @throws Exception
      */
-    public function getWalletCryptocurrencies(string $wallet_id): array
+    public function getWalletBalance(string $wallet_id): float
     {
         $userWallet = $this->cryptoDataStorage->getWalletById($wallet_id);
-        return $userWallet->getCoins();
+        return $userWallet->getBalance();
     }
 }

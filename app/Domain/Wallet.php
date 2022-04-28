@@ -36,4 +36,13 @@ class Wallet
     {
         $this->coins[] = $coin;
     }
+
+    public function getBalance(): float
+    {
+        $balance = 0;
+        foreach ($this->coins as $coin) {
+            $balance += $coin->getAmount() * $coin->getValueUsd();
+        }
+        return $balance;
+    }
 }
