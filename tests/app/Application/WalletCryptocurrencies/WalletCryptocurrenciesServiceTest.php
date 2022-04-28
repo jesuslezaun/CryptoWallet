@@ -2,8 +2,9 @@
 
 namespace Tests\App\Application\WalletCryptocurrencies;
 
-use App\Application\CryptoDataSource\CryptoDataSource;
+use App\Application\CryptoDataStorage\CryptoDataStorage;
 use App\Domain\Coin;
+use App\Domain\Wallet;
 use Exception;
 use Mockery;
 use PHPUnit\Framework\TestCase;
@@ -12,7 +13,7 @@ use App\Application\WalletCryptocurrencies\WalletCryptocurrenciesService;
 class WalletCryptocurrenciesServiceTest extends TestCase
 {
     private WalletCryptocurrenciesService $walletCryptoService;
-    private CryptoDataSource $cryptoDataSource;
+    private CryptoDataStorage $cryptoDataStorage;
 
     /**
      * @setUp
@@ -21,9 +22,9 @@ class WalletCryptocurrenciesServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->cryptoDataSource = Mockery::mock(CryptoDataSource::class);
+        $this->cryptoDataStorage = Mockery::mock(CryptoDataStorage::class);
 
-        $this->walletCryptoService = new WalletCryptocurrenciesService($this->cryptoDataSource);
+        $this->walletCryptoService = new WalletCryptocurrenciesService($this->cryptoDataStorage);
     }
 
     /**
@@ -33,8 +34,8 @@ class WalletCryptocurrenciesServiceTest extends TestCase
     {
         $wallet_id = "999";
 
-        $this->cryptoDataSource
-            ->expects('findWalletCryptocurrenciesById')
+        $this->cryptoDataStorage
+            ->expects('getWalletById')
             ->with($wallet_id)
             ->once()
             ->andThrow(new Exception('A wallet with the specified id was not found'));
@@ -51,8 +52,8 @@ class WalletCryptocurrenciesServiceTest extends TestCase
     {
         $wallet_id = "1";
 
-        $this->cryptoDataSource
-            ->expects('findWalletCryptocurrenciesById')
+        $this->cryptoDataStorage
+            ->expects('getWalletById')
             ->with($wallet_id)
             ->once()
             ->andThrow(new Exception('Service unavailable'));
@@ -66,15 +67,16 @@ class WalletCryptocurrenciesServiceTest extends TestCase
      * @test
      * @throws Exception
      */
-    public function walletItEmpty()
+    public function walletIsEmpty()
     {
         $wallet_id = "2";
+        $userWallet = new Wallet($wallet_id);
 
-        $this->cryptoDataSource
-            ->expects('findWalletCryptocurrenciesById')
+        $this->cryptoDataStorage
+            ->expects('getWalletById')
             ->with($wallet_id)
             ->once()
-            ->andReturn([]);
+            ->andReturn($userWallet);
 
         $walletCoins = $this->walletCryptoService->getWalletCryptocurrencies($wallet_id);
 
@@ -85,17 +87,20 @@ class WalletCryptocurrenciesServiceTest extends TestCase
      * @test
      * @throws Exception
      */
-    public function callReturnsWalletCoins()
+    public function callReturnsWalletCryptocurrencies()
     {
         $wallet_id = "2";
         $coin1 = new Coin("90", "Bitcoin", "BTC", 10, 6010);
         $coin2 = new Coin("80", "Ethereum", "ETH", 10, 1000);
+        $userWallet = new Wallet($wallet_id);
+        $userWallet->insertCoin($coin1);
+        $userWallet->insertCoin($coin2);
 
-        $this->cryptoDataSource
-            ->expects('findWalletCryptocurrenciesById')
+        $this->cryptoDataStorage
+            ->expects('getWalletById')
             ->with($wallet_id)
             ->once()
-            ->andReturns([$coin1, $coin2]);
+            ->andReturns($userWallet);
 
         $walletCoins = $this->walletCryptoService->getWalletCryptocurrencies($wallet_id);
 

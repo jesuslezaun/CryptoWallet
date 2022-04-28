@@ -3,23 +3,24 @@
 namespace App\Application\WalletCryptocurrencies;
 
 use App\Application\CryptoDataSource\CryptoDataSource;
+use App\Application\CryptoDataStorage\CryptoDataStorage;
 use App\Domain\Wallet;
 use Exception;
 
 class WalletCryptocurrenciesService
 {
     /**
-     * @var CryptoDataSource
+     * @var CryptoDataStorage
      */
-    private CryptoDataSource $cryptoDataSource;
+    private CryptoDataStorage $cryptoDataStorage;
 
     /**
      * WalletCryptocurrenciesService constructor.
-     * @param CryptoDataSource $cryptoDataSource
+     * @param CryptoDataStorage $cryptoDataStorage
      */
-    public function __construct(CryptoDataSource $cryptoDataSource)
+    public function __construct(CryptoDataStorage $cryptoDataStorage)
     {
-        $this->cryptoDataSource = $cryptoDataSource;
+        $this->cryptoDataStorage = $cryptoDataStorage;
     }
 
     /**
@@ -29,6 +30,7 @@ class WalletCryptocurrenciesService
      */
     public function getWalletCryptocurrencies(string $wallet_id): array
     {
-        return $this->cryptoDataSource->findWalletCryptocurrenciesById($wallet_id);
+        $userWallet = $this->cryptoDataStorage->getWalletById($wallet_id);
+        return $userWallet->getCoins();
     }
 }

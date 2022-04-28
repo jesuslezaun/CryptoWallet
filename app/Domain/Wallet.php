@@ -13,6 +13,7 @@ class Wallet
     public function __construct(string $wallet_id)
     {
         $this->wallet_id = $wallet_id;
+        $this->coins = [];
     }
 
     /**
@@ -21,5 +22,18 @@ class Wallet
     public function getWalletId(): string
     {
         return $this->wallet_id;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCoins(): array
+    {
+        return $this->coins;
+    }
+
+    public function insertCoin(Coin $coin): void
+    {
+        $this->coins[] = $coin;
     }
 }
