@@ -25,4 +25,44 @@ class Coin
         $this->amount = $amount;
         $this->value_usd = $value_usd;
     }
+
+    /**
+     * @return string
+     */
+    public function getCoinId(): string
+    {
+        return $this->coin_id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSymbol(): string
+    {
+        return $this->symbol;
+    }
+
+    /**
+     * @return float
+     */
+    public function getAmount(): float
+    {
+        return $this->amount;
+    }
+
+    /**
+     * @return float
+     */
+    public function getValueUsd(): float
+    {
+        return $this->value_usd;
+    }
 }

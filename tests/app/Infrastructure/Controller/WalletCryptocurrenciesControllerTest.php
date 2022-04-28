@@ -3,6 +3,7 @@
 namespace Tests\app\Infrastructure\Controller;
 
 use App\Application\CryptoDataSource\CryptoDataSource;
+use App\Domain\Coin;
 use Exception;
 use Illuminate\Http\Response;
 use Mockery;
@@ -73,5 +74,29 @@ class WalletCryptocurrenciesControllerTest extends TestCase
         $response = $this->get('/api/wallet/2');
 
         $response->assertStatus(Response::HTTP_OK)->assertExactJson([]);
+    }
+
+    /**
+     * @test
+     */
+    public function callReturnsWalletCoins()
+    {
+        $coin1 = new Coin("90", "Bitcoin", "BTC", 10, 6010);
+        $coin2 = new Coin("80", "Ethereum", "ETH", 10, 1000);
+
+        $this->cryptoDataSource
+            ->expects('findWalletCryptocurrenciesById')
+            ->with('2')
+            ->once()
+            ->andReturn([$coin1, $coin2]);
+
+        $response = $this->get('/api/wallet/2');
+
+        $response
+            ->assertStatus(Response::HTTP_OK)
+            ->assertExactJson([['coin_id' => "90", 'name' => 'Bitcoin', 'symbol' => 'BTC',
+                'amount' => 10, 'value_usd' => 6010],
+                ['coin_id' => "80", 'name' => 'Ethereum', 'symbol' => 'ETH',
+                'amount' => 10, 'value_usd' => 1000]]);
     }
 }

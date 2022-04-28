@@ -80,4 +80,25 @@ class WalletCryptocurrenciesServiceTest extends TestCase
 
         $this->assertEquals([], $walletCoins);
     }
+
+    /**
+     * @test
+     * @throws Exception
+     */
+    public function callReturnsWalletCoins()
+    {
+        $wallet_id = "2";
+        $coin1 = new Coin("90", "Bitcoin", "BTC", 10, 6010);
+        $coin2 = new Coin("80", "Ethereum", "ETH", 10, 1000);
+
+        $this->cryptoDataSource
+            ->expects('findWalletCryptocurrenciesById')
+            ->with($wallet_id)
+            ->once()
+            ->andReturns([$coin1, $coin2]);
+
+        $walletCoins = $this->walletCryptoService->getWalletCryptocurrencies($wallet_id);
+
+        $this->assertEquals([$coin1, $coin2], $walletCoins);
+    }
 }

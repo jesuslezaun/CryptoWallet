@@ -34,6 +34,16 @@ class WalletCryptocurrenciesController
             ], Response::HTTP_NOT_FOUND);
         }
 
-        return response()->json([]);
+        $jsonData = [];
+
+        foreach ($walletCryptos as $coin) {
+            $jsonData[] = ['coin_id' => $coin->getCoinId(),
+                'name' => $coin->getName(),
+                'symbol' => $coin->getSymbol(),
+                'amount' => $coin->getAmount(),
+                'value_usd' => $coin->getValueUsd()];
+        }
+
+        return response()->json($jsonData, Response::HTTP_OK);
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Application\CryptoDataSource;
 
 use App\Domain\CoinStatus;
-use App\Domain\Wallet;
 
 interface CryptoDataSource
 {
