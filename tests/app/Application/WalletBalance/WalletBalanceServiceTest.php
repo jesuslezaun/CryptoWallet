@@ -62,4 +62,28 @@ class WalletBalanceServiceTest extends TestCase
 
         $this->walletBalanceService->getWalletBalance($wallet_id);
     }
+
+    /**
+     * @test
+     * @throws Exception
+     */
+    public function callReturnsWalletCryptocurrencies()
+    {
+        $wallet_id = "2";
+        $coin1 = new Coin("90", "Bitcoin", "BTC", 10, 6010);
+        $coin2 = new Coin("80", "Ethereum", "ETH", 10, 1000);
+        $userWallet = new Wallet($wallet_id);
+        $userWallet->insertCoin($coin1);
+        $userWallet->insertCoin($coin2);
+
+        $this->cryptoDataStorage
+            ->expects('getWalletById')
+            ->with($wallet_id)
+            ->once()
+            ->andReturns($userWallet);
+
+        $walletBalance = $this->walletBalanceService->getWalletBalance($wallet_id);
+
+        $this->assertEquals(70100, $walletBalance);
+    }
 }

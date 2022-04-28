@@ -33,5 +33,9 @@ class WalletBalanceController
                 'error' => $exception->getMessage()
             ], Response::HTTP_NOT_FOUND);
         }
+
+        return response()->json([
+            'balance' => $walletBalance
+        ], Response::HTTP_OK);
     }
 }

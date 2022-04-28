@@ -60,4 +60,27 @@ class WalletBalanceControllerTest extends TestCase
             ->assertStatus(Response::HTTP_SERVICE_UNAVAILABLE)
             ->assertExactJson(['error' => 'Service unavailable']);
     }
+
+    /**
+     * @test
+     */
+    public function callReturnsWalletBalance()
+    {
+        $wallet_id = 2;
+        $coin1 = new Coin("90", "Bitcoin", "BTC", 10, 6010);
+        $coin2 = new Coin("80", "Ethereum", "ETH", 10, 1000);
+        $userWallet = new Wallet($wallet_id);
+        $userWallet->insertCoin($coin1);
+        $userWallet->insertCoin($coin2);
+
+        $this->cryptoDataStorage
+            ->expects('getWalletById')
+            ->with('2')
+            ->once()
+            ->andReturn($userWallet);
+
+        $response = $this->get('/api/wallet/2/balance');
+
+        $response->assertStatus(Response::HTTP_OK)->assertExactJson(['balance' => 70100]);
+    }
 }
