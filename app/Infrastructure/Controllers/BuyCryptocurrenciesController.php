@@ -28,5 +28,10 @@ class BuyCryptocurrenciesController
                 'error' => 'Wallet id missing from request'
             ], Response::HTTP_BAD_REQUEST);
         }
+        if (!($request->has('amount_usd'))) {
+            return response()->json([
+                'error' => 'Amount missing from request'
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 }

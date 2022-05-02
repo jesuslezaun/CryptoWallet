@@ -31,4 +31,16 @@ class BuyCryptocurrenciesControllerTest extends TestCase
             ->assertStatus(Response::HTTP_BAD_REQUEST)
             ->assertExactJson(['error' => 'Wallet id missing from request']);
     }
+
+    /**
+     * @test
+     */
+    public function amountNotProvided()
+    {
+        $response = $this->post('/api/coin/buy', ['coin_id' => '2', 'wallet_id' => '5']);
+
+        $response
+            ->assertStatus(Response::HTTP_BAD_REQUEST)
+            ->assertExactJson(['error' => 'Amount missing from request']);
+    }
 }
