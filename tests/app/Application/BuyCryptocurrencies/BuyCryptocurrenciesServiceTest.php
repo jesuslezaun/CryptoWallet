@@ -45,4 +45,24 @@ class BuyCryptocurrenciesServiceTest extends TestCase
 
         $this->buyCryptosService->execute($coinId, $walletId, $amountUsd);
     }
+
+    /**
+     * @test
+     */
+    public function coinNotFoundForGivenId()
+    {
+        $coinId = "999";
+        $walletId = "5";
+        $amountUsd = 0;
+
+        $this->cryptoDataSource
+            ->expects('findCoinById')
+            ->with($coinId)
+            ->once()
+            ->andThrow(new Exception('A coin with the specified id was not found'));
+
+        $this->expectException(Exception::class);
+
+        $this->buyCryptosService->execute($coinId, $walletId, $amountUsd);
+    }
 }

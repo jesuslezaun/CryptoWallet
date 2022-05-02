@@ -42,9 +42,14 @@ class BuyCryptocurrenciesController
             $this->buyCryptosService
                 ->execute($request->input('coin_id'), $request->input('wallet_id'), $request->input('amount_usd'));
         } catch (Exception $exception) {
-            return response()->json([
+            if ($exception->getMessage() == "Service unavailable") {
+                return response()->json([
                     'error' => $exception->getMessage()
                 ], Response::HTTP_SERVICE_UNAVAILABLE);
+            }
+            return response()->json([
+                'error' => $exception->getMessage()
+            ], Response::HTTP_NOT_FOUND);
         }
     }
 }

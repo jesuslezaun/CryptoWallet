@@ -77,4 +77,22 @@ class BuyCryptocurrenciesControllerTest extends TestCase
             ->assertStatus(Response::HTTP_SERVICE_UNAVAILABLE)
             ->assertExactJson(['error' => 'Service unavailable']);
     }
+
+    /**
+     * @test
+     */
+    public function coinNotFoundForGivenId()
+    {
+        $this->cryptoDataSource
+            ->expects('findCoinById')
+            ->with('999')
+            ->once()
+            ->andThrow(new Exception('A coin with the specified id was not found'));
+
+        $response = $this->post('/api/coin/buy', ['coin_id' => '999', 'wallet_id' => '5', 'amount_usd' => 0]);
+
+        $response
+            ->assertStatus(Response::HTTP_NOT_FOUND)
+            ->assertExactJson(['error' => 'A coin with the specified id was not found']);
+    }
 }
