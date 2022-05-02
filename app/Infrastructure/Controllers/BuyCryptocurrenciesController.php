@@ -23,5 +23,10 @@ class BuyCryptocurrenciesController
                 'error' => 'Coin id missing from request'
             ], Response::HTTP_BAD_REQUEST);
         }
+        if (!($request->has('wallet_id'))) {
+            return response()->json([
+                'error' => 'Wallet id missing from request'
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 }
