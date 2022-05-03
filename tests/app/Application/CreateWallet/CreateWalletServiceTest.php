@@ -48,7 +48,7 @@ class CreateWalletServiceTest extends TestCase
      */
     public function callReturnsWalletId()
     {
-        $wallet_id = "0";
+        $wallet_id = "1";
         $user_wallet = new Wallet($wallet_id);
 
         $this->cryptoDataStorage

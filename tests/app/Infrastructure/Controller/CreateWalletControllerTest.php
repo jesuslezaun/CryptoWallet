@@ -46,7 +46,7 @@ class CreateWalletControllerTest extends TestCase
      */
     public function callReturnsWalletId()
     {
-        $user_wallet = new Wallet('0');
+        $user_wallet = new Wallet('1');
 
         $this->cryptoDataStorage
             ->expects('createWallet')
@@ -55,6 +55,6 @@ class CreateWalletControllerTest extends TestCase
 
         $response = $this->post('/api/wallet/open');
 
-        $response->assertStatus(Response::HTTP_OK)->assertExactJson(['wallet_id' => '0']);
+        $response->assertStatus(Response::HTTP_OK)->assertExactJson(['wallet_id' => '1']);
     }
 }
