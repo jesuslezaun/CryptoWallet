@@ -2,6 +2,7 @@
 
 namespace Tests\App\Application\Balance;
 
+use App\Application\CryptoDataSource\CryptoDataSource;
 use App\Application\CryptoDataStorage\CryptoDataStorage;
 use App\Application\WalletBalance\WalletBalanceService;
 use App\Domain\Coin;
@@ -14,6 +15,7 @@ class WalletBalanceServiceTest extends TestCase
 {
     private WalletBalanceService $walletBalanceService;
     private CryptoDataStorage $cryptoDataStorage;
+    private CryptoDataSource $cryptoDataSource;
 
     /**
      * @setUp
@@ -23,8 +25,9 @@ class WalletBalanceServiceTest extends TestCase
         parent::setUp();
 
         $this->cryptoDataStorage = Mockery::mock(CryptoDataStorage::class);
+        $this->cryptoDataSource = Mockery::mock(CryptoDataSource::class);
 
-        $this->walletBalanceService = new WalletBalanceService($this->cryptoDataStorage);
+        $this->walletBalanceService = new WalletBalanceService($this->cryptoDataStorage, $this->cryptoDataSource);
     }
 
     /**
@@ -81,6 +84,11 @@ class WalletBalanceServiceTest extends TestCase
             ->with($wallet_id)
             ->once()
             ->andReturns($userWallet);
+
+        $this->cryptoDataSource
+            ->expects('getCoinUsdValueById')
+            ->twice()
+            ->andReturnValues([6010, 1000]);
 
         $walletBalance = $this->walletBalanceService->getWalletBalance($wallet_id);
 

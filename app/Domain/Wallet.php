@@ -2,6 +2,8 @@
 
 namespace App\Domain;
 
+use App\Application\CryptoDataSource\CryptoDataSource;
+
 class Wallet
 {
     private string $wallet_id;
@@ -37,11 +39,11 @@ class Wallet
         $this->coins[] = $coin;
     }
 
-    public function getBalance(): float
+    public function getBalance(CryptoDataSource $cryptoDataSource): float
     {
         $balance = 0;
         foreach ($this->coins as $coin) {
-            $balance += $coin->getAmount() * $coin->getValueUsd();
+            $balance += $coin->getAmount() * $cryptoDataSource->getCoinUsdValueById($coin->getCoinId());
         }
         return $balance;
     }
