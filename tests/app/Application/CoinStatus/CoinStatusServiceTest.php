@@ -65,6 +65,7 @@ class CoinStatusServiceTest extends TestCase
 
     /**
      * @test
+     * @throws Exception
      */
     public function getCoinStatusForGivenId()
     {
