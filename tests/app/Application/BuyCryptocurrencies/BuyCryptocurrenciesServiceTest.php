@@ -94,4 +94,28 @@ class BuyCryptocurrenciesServiceTest extends TestCase
 
         $this->buyCryptosService->execute($coinId, $walletId, $amountUsd);
     }
+
+    /**
+     * @test
+     */
+    public function amountNotPositive()
+    {
+        $coinId = "1";
+        $walletId = "1";
+        $amountUsd = 0;
+
+        $this->cryptoDataSource
+            ->expects('findCoinById')
+            ->with($coinId)
+            ->once();
+
+        $this->cryptoDataStorage
+            ->expects('getWalletById')
+            ->with($walletId)
+            ->once();
+
+        $this->expectException(Exception::class);
+
+        $this->buyCryptosService->execute($coinId, $walletId, $amountUsd);
+    }
 }

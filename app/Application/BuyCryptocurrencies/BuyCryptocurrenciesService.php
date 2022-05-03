@@ -30,5 +30,9 @@ class BuyCryptocurrenciesService
         $coin = $this->cryptoDataSource->findCoinById($coinId);
 
         $wallet = $this->cryptoDataStorage->getWalletById($walletId);
+
+        if ($amountUsd <= 0) {
+            throw new Exception("Amount should be positive");
+        }
     }
 }

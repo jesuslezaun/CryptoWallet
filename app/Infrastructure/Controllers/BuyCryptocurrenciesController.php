@@ -41,6 +41,11 @@ class BuyCryptocurrenciesController
                     'error' => $exception->getMessage()
                 ], Response::HTTP_SERVICE_UNAVAILABLE);
             }
+            if ($exception->getMessage() == "Amount should be positive") {
+                return response()->json([
+                    'error' => $exception->getMessage()
+                ], Response::HTTP_BAD_REQUEST);
+            }
             return response()->json([
                 'error' => $exception->getMessage()
             ], Response::HTTP_NOT_FOUND);

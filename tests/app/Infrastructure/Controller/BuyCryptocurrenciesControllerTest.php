@@ -99,4 +99,26 @@ class BuyCryptocurrenciesControllerTest extends TestCase
             ->assertStatus(Response::HTTP_NOT_FOUND)
             ->assertExactJson(['error' => 'A wallet with the specified id was not found']);
     }
+
+    /**
+     * @test
+     */
+    public function amountNotPositive()
+    {
+        $this->cryptoDataSource
+            ->expects('findCoinById')
+            ->with('999')
+            ->once();
+
+        $this->cryptoDataStorage
+            ->expects('getWalletById')
+            ->with('999')
+            ->once();
+
+        $response = $this->post('/api/coin/buy', ['coin_id' => '999', 'wallet_id' => '999', 'amount_usd' => 0]);
+
+        $response
+            ->assertStatus(Response::HTTP_BAD_REQUEST)
+            ->assertExactJson(['error' => 'Amount should be positive']);
+    }
 }
