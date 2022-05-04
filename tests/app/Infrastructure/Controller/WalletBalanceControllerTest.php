@@ -2,6 +2,7 @@
 
 namespace Tests\app\Infrastructure\Controller;
 
+use App\Application\CryptoDataSource\CryptoDataSource;
 use App\Application\CryptoDataStorage\CryptoDataStorage;
 use App\Domain\Coin;
 use App\Domain\Wallet;
@@ -10,9 +11,10 @@ use Illuminate\Http\Response;
 use Mockery;
 use Tests\TestCase;
 
-class WalletCryptocurrenciesControllerTest extends TestCase
+class WalletBalanceControllerTest extends TestCase
 {
     private CryptoDataStorage $cryptoDataStorage;
+    private CryptoDataSource $cryptoDataSource;
 
     /**
      * @setUp
@@ -22,7 +24,9 @@ class WalletCryptocurrenciesControllerTest extends TestCase
         parent::setUp();
 
         $this->cryptoDataStorage = Mockery::mock(CryptoDataStorage::class);
+        $this->cryptoDataSource = Mockery::mock(CryptoDataSource::class);
         $this->app->bind(CryptoDataStorage::class, fn () => $this->cryptoDataStorage);
+        $this->app->bind(CryptoDataSource::class, fn () => $this->cryptoDataSource);
     }
 
     /**
@@ -36,7 +40,7 @@ class WalletCryptocurrenciesControllerTest extends TestCase
             ->once()
             ->andThrow(new Exception('A wallet with the specified id was not found'));
 
-        $response = $this->get('/api/wallet/999');
+        $response = $this->get('/api/wallet/999/balance');
 
         $response
             ->assertStatus(Response::HTTP_NOT_FOUND)
@@ -54,7 +58,7 @@ class WalletCryptocurrenciesControllerTest extends TestCase
             ->once()
             ->andThrow(new Exception('Service unavailable'));
 
-        $response = $this->get('/api/wallet/2');
+        $response = $this->get('/api/wallet/2/balance');
 
         $response
             ->assertStatus(Response::HTTP_SERVICE_UNAVAILABLE)
@@ -64,25 +68,7 @@ class WalletCryptocurrenciesControllerTest extends TestCase
     /**
      * @test
      */
-    public function walletIsEmpty()
-    {
-        $userWallet = new Wallet("2");
-
-        $this->cryptoDataStorage
-            ->expects('getWalletById')
-            ->with('2')
-            ->once()
-            ->andReturn($userWallet);
-
-        $response = $this->get('/api/wallet/2');
-
-        $response->assertStatus(Response::HTTP_OK)->assertExactJson([]);
-    }
-
-    /**
-     * @test
-     */
-    public function callReturnsWalletCryptocurrencies()
+    public function callReturnsWalletBalance()
     {
         $wallet_id = 2;
         $coin1 = new Coin("90", "Bitcoin", "BTC", 10, 6010);
@@ -97,13 +83,13 @@ class WalletCryptocurrenciesControllerTest extends TestCase
             ->once()
             ->andReturn($userWallet);
 
-        $response = $this->get('/api/wallet/2');
+        $this->cryptoDataSource
+            ->expects('getCoinUsdValueById')
+            ->twice()
+            ->andReturnValues([6010, 1000]);
 
-        $response
-            ->assertStatus(Response::HTTP_OK)
-            ->assertExactJson([['coin_id' => "90", 'name' => 'Bitcoin', 'symbol' => 'BTC',
-                'amount' => 10, 'value_usd' => 6010],
-                ['coin_id' => "80", 'name' => 'Ethereum', 'symbol' => 'ETH',
-                'amount' => 10, 'value_usd' => 1000]]);
+        $response = $this->get('/api/wallet/2/balance');
+
+        $response->assertStatus(Response::HTTP_OK)->assertExactJson(['balance' => 70100]);
     }
 }

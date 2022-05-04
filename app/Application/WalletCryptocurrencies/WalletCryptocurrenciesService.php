@@ -2,9 +2,7 @@
 
 namespace App\Application\WalletCryptocurrencies;
 
-use App\Application\CryptoDataSource\CryptoDataSource;
 use App\Application\CryptoDataStorage\CryptoDataStorage;
-use App\Domain\Wallet;
 use Exception;
 
 class WalletCryptocurrenciesService
