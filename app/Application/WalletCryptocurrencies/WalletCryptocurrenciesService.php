@@ -13,14 +13,17 @@ class WalletCryptocurrenciesService
      * @var CryptoDataStorage
      */
     private CryptoDataStorage $cryptoDataStorage;
+    private CryptoDataSource $cryptoDataSource;
 
     /**
      * WalletCryptocurrenciesService constructor.
      * @param CryptoDataStorage $cryptoDataStorage
+     * @param CryptoDataSource $cryptoDataSource
      */
-    public function __construct(CryptoDataStorage $cryptoDataStorage)
+    public function __construct(CryptoDataStorage $cryptoDataStorage, CryptoDataSource $cryptoDataSource)
     {
         $this->cryptoDataStorage = $cryptoDataStorage;
+        $this->cryptoDataSource = $cryptoDataSource;
     }
 
     /**
@@ -31,6 +34,11 @@ class WalletCryptocurrenciesService
     public function getWalletCryptocurrencies(string $wallet_id): array
     {
         $userWallet = $this->cryptoDataStorage->getWalletById($wallet_id);
-        return $userWallet->getCoins();
+        $walletCryptos = $userWallet->getCoins();
+        for ($i = 0; $i < sizeof($walletCryptos); $i++) {
+            $walletCryptos[$i]
+                ->setValueUsd($this->cryptoDataSource->getCoinUsdValueById($walletCryptos[$i]->getCoinId()));
+        }
+        return $walletCryptos;
     }
 }

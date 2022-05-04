@@ -2,6 +2,7 @@
 
 namespace Tests\App\Application\WalletCryptocurrencies;
 
+use App\Application\CryptoDataSource\CryptoDataSource;
 use App\Application\CryptoDataStorage\CryptoDataStorage;
 use App\Domain\Coin;
 use App\Domain\Wallet;
@@ -14,6 +15,7 @@ class WalletCryptocurrenciesServiceTest extends TestCase
 {
     private WalletCryptocurrenciesService $walletCryptoService;
     private CryptoDataStorage $cryptoDataStorage;
+    private CryptoDataSource $cryptoDataSource;
 
     /**
      * @setUp
@@ -23,8 +25,10 @@ class WalletCryptocurrenciesServiceTest extends TestCase
         parent::setUp();
 
         $this->cryptoDataStorage = Mockery::mock(CryptoDataStorage::class);
+        $this->cryptoDataSource = Mockery::mock(CryptoDataSource::class);
 
-        $this->walletCryptoService = new WalletCryptocurrenciesService($this->cryptoDataStorage);
+        $this->walletCryptoService =
+            new WalletCryptocurrenciesService($this->cryptoDataStorage, $this->cryptoDataSource);
     }
 
     /**
@@ -101,6 +105,11 @@ class WalletCryptocurrenciesServiceTest extends TestCase
             ->with($wallet_id)
             ->once()
             ->andReturns($userWallet);
+
+        $this->cryptoDataSource
+            ->expects('getCoinUsdValueById')
+            ->twice()
+            ->andReturnValues([6010, 1000]);
 
         $walletCoins = $this->walletCryptoService->getWalletCryptocurrencies($wallet_id);
 
