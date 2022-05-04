@@ -32,22 +32,8 @@ class Wallet
         return $this->coins;
     }
 
-    public function setCoins(array $coins): void
-    {
-        $this->coins = $coins;
-    }
-
     public function insertCoin(Coin $coin): void
     {
         $this->coins[] = $coin;
-    }
-
-    public function getBalance(): float
-    {
-        $balance = 0;
-        foreach ($this->coins as $coin) {
-            $balance += $coin->getAmount() * $coin->getValueUsd();
-        }
-        return $balance;
     }
 }

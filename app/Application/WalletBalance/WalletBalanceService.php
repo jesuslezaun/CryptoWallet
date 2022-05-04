@@ -35,14 +35,10 @@ class WalletBalanceService
         $walletCryptos = $userWallet->getCoins();
         $balance = 0;
         for ($i = 0; $i < sizeof($walletCryptos); $i++) {
-            //$walletCryptos[$i]
-            // ->setValueUsd($this->cryptoDataSource->getCoinUsdValueById($walletCryptos[$i]->getCoinId()));
             $balance +=
                 $walletCryptos[$i]->getAmount() *
                 $this->cryptoDataSource->getCoinUsdValueById($walletCryptos[$i]->getCoinId());
         }
-        //$userWallet->setCoins($walletCryptos);
-        //return $userWallet->getBalance();
         return $balance;
     }
 }
