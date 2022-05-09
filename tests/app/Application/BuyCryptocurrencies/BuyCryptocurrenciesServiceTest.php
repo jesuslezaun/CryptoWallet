@@ -162,4 +162,46 @@ class BuyCryptocurrenciesServiceTest extends TestCase
 
         $this->assertEmpty($buyCryptoResponse);
     }
+
+    /**
+     * @test
+     */
+    public function existingCoinBought()
+    {
+        $coinId = "90";
+        $coin = new Coin($coinId, "Bitcoin", "BTC", 10, 6010);
+        $walletId = "1";
+        $wallet = new Wallet($walletId);
+        $wallet->insertCoin($coin);
+        $amountUsd = 6010;
+        $expectedWallet = new Wallet($walletId);
+        $coin->setAmount(11);
+        $expectedWallet->insertCoin($coin);
+
+        $this->cryptoDataSource
+            ->expects('findCoinById')
+            ->with($coinId)
+            ->once()
+            ->andReturn($coin);
+        $this->cryptoDataStorage
+            ->expects('getWalletById')
+            ->with($walletId)
+            ->once()
+            ->andReturn($wallet);
+        $this->cryptoDataStorage
+            ->expects('updateWallet')
+            ->with(\Mockery::on(function ($walletParameter) use ($expectedWallet) {
+                $coinsParameter = $walletParameter->getCoins();
+                $coinBought = $coinsParameter[$walletParameter->isCoinInWallet("90")];
+                $coinsExpected = $expectedWallet->getCoins();
+                $expectedCoinBought = $coinsExpected[$expectedWallet->isCoinInWallet("90")];
+
+                return ($coinBought->getAmount() == $expectedCoinBought->getAmount());
+            }))
+            ->once();
+
+        $buyCryptoResponse = $this->buyCryptosService->execute($coinId, $walletId, $amountUsd);
+
+        $this->assertEmpty($buyCryptoResponse);
+    }
 }
