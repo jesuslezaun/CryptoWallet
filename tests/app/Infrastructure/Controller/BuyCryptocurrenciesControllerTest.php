@@ -111,7 +111,6 @@ class BuyCryptocurrenciesControllerTest extends TestCase
             ->expects('findCoinById')
             ->with('999')
             ->once();
-
         $this->cryptoDataStorage
             ->expects('getWalletById')
             ->with('999')
@@ -137,13 +136,11 @@ class BuyCryptocurrenciesControllerTest extends TestCase
             ->with('90')
             ->once()
             ->andReturn($coin);
-
         $this->cryptoDataStorage
             ->expects('getWalletById')
             ->with('1')
             ->once()
             ->andReturn($wallet);
-
         $this->cryptoDataStorage
             ->expects('updateWallet')
             ->once();

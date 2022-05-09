@@ -111,7 +111,6 @@ class BuyCryptocurrenciesServiceTest extends TestCase
             ->expects('findCoinById')
             ->with($coinId)
             ->once();
-
         $this->cryptoDataStorage
             ->expects('getWalletById')
             ->with($walletId)
