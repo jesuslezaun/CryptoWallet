@@ -1,5 +1,6 @@
 <?php
 
+use App\Infrastructure\Controllers\BuyCryptocurrenciesController;
 use App\Infrastructure\Controllers\CoinStatusController;
 use App\Infrastructure\Controllers\CreateWalletController;
 use App\Infrastructure\Controllers\GetUserController;
@@ -35,6 +36,10 @@ Route::get('user/id/{userId}', GetUserController::class);
 Route::get('coin/status/{coin_id}', CoinStatusController::class);
 
 Route::get('wallet/{wallet_id}', WalletCryptocurrenciesController::class);
+
+Route::post('coin/buy', BuyCryptocurrenciesController::class);
+
 Route::get('wallet/{wallet_id}/balance', WalletBalanceController::class);
 
 Route::post('wallet/open', CreateWalletController::class);
+
