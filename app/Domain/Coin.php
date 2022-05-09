@@ -59,6 +59,14 @@ class Coin
     }
 
     /**
+     * @param float $amount
+     */
+    public function setAmount(float $amount): void
+    {
+        $this->amount = $amount;
+    }
+
+    /**
      * @return float
      */
     public function getValueUsd(): float

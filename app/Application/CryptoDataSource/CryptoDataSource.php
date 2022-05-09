@@ -2,6 +2,7 @@
 
 namespace App\Application\CryptoDataSource;
 
+use App\Domain\Coin;
 use App\Domain\CoinStatus;
 
 interface CryptoDataSource

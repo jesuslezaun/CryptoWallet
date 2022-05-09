@@ -50,5 +50,7 @@ class BuyCryptocurrenciesController
                 'error' => $exception->getMessage()
             ], Response::HTTP_NOT_FOUND);
         }
+
+        return response()->json([], Response::HTTP_OK);
     }
 }

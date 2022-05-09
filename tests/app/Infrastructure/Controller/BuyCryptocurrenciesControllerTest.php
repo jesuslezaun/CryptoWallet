@@ -4,6 +4,8 @@ namespace Tests\app\Infrastructure\Controller;
 
 use App\Application\CryptoDataSource\CryptoDataSource;
 use App\Application\CryptoDataStorage\CryptoDataStorage;
+use App\Domain\Coin;
+use App\Domain\Wallet;
 use App\Infrastructure\Controllers\BuyCryptocurrenciesController;
 use Exception;
 use Illuminate\Http\Response;
@@ -120,5 +122,36 @@ class BuyCryptocurrenciesControllerTest extends TestCase
         $response
             ->assertStatus(Response::HTTP_BAD_REQUEST)
             ->assertExactJson(['error' => 'Amount should be positive']);
+    }
+
+    /**
+     * @test
+     */
+    public function coinBought()
+    {
+        $coin = new Coin("90", "Bitcoin", "BTC", 0, 6010);
+        $wallet = new Wallet("1");
+
+        $this->cryptoDataSource
+            ->expects('findCoinById')
+            ->with('90')
+            ->once()
+            ->andReturn($coin);
+
+        $this->cryptoDataStorage
+            ->expects('getWalletById')
+            ->with('1')
+            ->once()
+            ->andReturn($wallet);
+
+        $this->cryptoDataStorage
+            ->expects('updateWallet')
+            ->once();
+
+        $response = $this->post('/api/coin/buy', ['coin_id' => '90', 'wallet_id' => '1', 'amount_usd' => 50]);
+
+        $response
+            ->assertStatus(Response::HTTP_OK)
+            ->assertExactJson([]);
     }
 }

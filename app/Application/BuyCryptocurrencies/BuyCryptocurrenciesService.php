@@ -34,5 +34,19 @@ class BuyCryptocurrenciesService
         if ($amountUsd <= 0) {
             throw new Exception("Amount should be positive");
         }
+
+        $index = $wallet->isCoinInWallet($coinId);
+
+        if ($index == -1) {
+            $coin->setAmount($amountUsd / $coin->getValueUsd());
+            $wallet->insertCoin($coin);
+        } else {
+            $walletCoins = $wallet->getCoins();
+            $walletCoins[$index]
+                ->setAmount($walletCoins[$index]->getAmount() + ($amountUsd / $coin->getValueUsd()));
+            $wallet->setCoins($walletCoins);
+        }
+
+        $this->cryptoDataStorage->updateWallet($wallet);
     }
 }

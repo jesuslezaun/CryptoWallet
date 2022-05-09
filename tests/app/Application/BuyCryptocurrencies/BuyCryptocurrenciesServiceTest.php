@@ -6,9 +6,12 @@ use App\Application\BuyCryptocurrencies\BuyCryptocurrenciesService;
 use App\Application\CoinStatus\CoinStatusService;
 use App\Application\CryptoDataSource\CryptoDataSource;
 use App\Application\CryptoDataStorage\CryptoDataStorage;
+use App\Domain\Coin;
+use App\Domain\Wallet;
 use Exception;
 use Mockery;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\EventDispatcher\Debug\WrappedListener;
 
 class BuyCryptocurrenciesServiceTest extends TestCase
 {
@@ -117,5 +120,46 @@ class BuyCryptocurrenciesServiceTest extends TestCase
         $this->expectException(Exception::class);
 
         $this->buyCryptosService->execute($coinId, $walletId, $amountUsd);
+    }
+
+    /**
+     * @test
+     */
+    public function newCoinBought()
+    {
+        $coinId = "90";
+        $coin = new Coin($coinId, "Bitcoin", "BTC", 0, 6010);
+        $walletId = "1";
+        $wallet = new Wallet($walletId);
+        $amountUsd = 6010;
+        $expectedWallet = new Wallet($walletId);
+        $coin->setAmount(1);
+        $expectedWallet->insertCoin($coin);
+
+        $this->cryptoDataSource
+            ->expects('findCoinById')
+            ->with($coinId)
+            ->once()
+            ->andReturn($coin);
+        $this->cryptoDataStorage
+            ->expects('getWalletById')
+            ->with($walletId)
+            ->once()
+            ->andReturn($wallet);
+        $this->cryptoDataStorage
+            ->expects('updateWallet')
+            ->with(\Mockery::on(function ($walletParameter) use ($expectedWallet) {
+                $coinsParameter = $walletParameter->getCoins();
+                $coinBought = $coinsParameter[$walletParameter->isCoinInWallet("90")];
+                $coinsExpected = $expectedWallet->getCoins();
+                $expectedCoinBought = $coinsExpected[$expectedWallet->isCoinInWallet("90")];
+
+                return ($coinBought->getAmount() == $expectedCoinBought->getAmount());
+            }))
+            ->once();
+
+        $buyCryptoResponse = $this->buyCryptosService->execute($coinId, $walletId, $amountUsd);
+
+        $this->assertEmpty($buyCryptoResponse);
     }
 }

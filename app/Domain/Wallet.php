@@ -32,8 +32,24 @@ class Wallet
         return $this->coins;
     }
 
+    public function setCoins(array $walletCoins)
+    {
+        $this->coins = $walletCoins;
+    }
+
     public function insertCoin(Coin $coin): void
     {
         $this->coins[] = $coin;
+    }
+
+    public function isCoinInWallet(string $coin_id): int
+    {
+        for ($index = 0; $index < sizeof($this->coins); $index++) {
+            if ($this->coins[$index]->getCoinId() == $coin_id) {
+                return $index;
+            }
+        }
+
+        return -1;
     }
 }
