@@ -4,6 +4,7 @@ namespace Tests\App\Application\CryptoDataStorage;
 
 use App\Application\CryptoDataStorage\CacheCryptoDataStorage;
 use App\Application\CryptoDataStorage\CryptoDataStorage;
+use App\Domain\Coin;
 use App\Domain\Wallet;
 use Exception;
 use Tests\TestCase;
@@ -28,7 +29,7 @@ class CacheCryptoDataStorageTest extends TestCase
      */
     public function newWalletCreated()
     {
-        Cache::forget("1");
+        Cache::flush();
 
         $walletCreated = $this->cacheStorage->createWallet();
 
@@ -55,5 +56,20 @@ class CacheCryptoDataStorageTest extends TestCase
         $returnedWallet = $this->cacheStorage->getWalletById($expectedWallet->getWalletId());
 
         $this->assertEquals($expectedWallet, $returnedWallet);
+    }
+
+    /**
+     * @test
+     */
+    public function walletUpdatedSuccesfully()
+    {
+        $coin = new Coin("90", "Bitcoin", "BTC", 0, 6010);
+        $wallet = $this->cacheStorage->createWallet();
+        $wallet->insertCoin($coin);
+
+        $this->cacheStorage->updateWallet($wallet);
+
+        $updatedWallet = $this->cacheStorage->getWalletById($wallet->getWalletId());
+        $this->assertEquals($wallet, $updatedWallet);
     }
 }

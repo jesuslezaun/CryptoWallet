@@ -21,7 +21,8 @@ class CacheCryptoDataStorage implements CryptoDataStorage
 
     public function updateWallet(Wallet $wallet): void
     {
-        // TODO: Implement updateWallet() method.
+        Cache::pull($wallet->getWalletId());
+        Cache::put($wallet->getWalletId(), $wallet);
     }
 
     public function createWallet(): Wallet
