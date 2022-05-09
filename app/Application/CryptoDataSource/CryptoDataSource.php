@@ -10,4 +10,7 @@ interface CryptoDataSource
     public function findCoinStatusById(string $coinId): CoinStatus;
 
     public function findCoinById(string $coinId): Coin;
+
+    public function getCoinUsdValueById(string $coindId): float;
+
 }
