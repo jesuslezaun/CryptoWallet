@@ -10,6 +10,13 @@ class CacheCryptoDataStorage implements CryptoDataStorage
 {
     public function getWalletById(string $wallet_id): Wallet
     {
+        $wallet = Cache::get($wallet_id);
+
+        if ($wallet == null) {
+            throw new Exception("A wallet with the specified id was not found");
+        }
+
+        return $wallet;
     }
 
     public function updateWallet(Wallet $wallet): void

@@ -5,6 +5,7 @@ namespace Tests\App\Application\CryptoDataStorage;
 use App\Application\CryptoDataStorage\CacheCryptoDataStorage;
 use App\Application\CryptoDataStorage\CryptoDataStorage;
 use App\Domain\Wallet;
+use Exception;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Cache;
 
@@ -32,5 +33,15 @@ class CacheCryptoDataStorageTest extends TestCase
         $walletCreated = $this->cacheStorage->createWallet();
 
         $this->assertEquals("1", $walletCreated->getWalletId());
+    }
+
+    /**
+     * @test
+     */
+    public function walletWithSpecificIdWasNotFound()
+    {
+        $this->expectException(Exception::class);
+
+        $this->cacheStorage->getWalletById("99");
     }
 }
