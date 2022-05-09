@@ -29,7 +29,6 @@ class CreateWalletServiceTest extends TestCase
     /**
      * @test
      */
-
     public function serviceIsUnavailable()
     {
         $this->cryptoDataStorage
@@ -39,12 +38,11 @@ class CreateWalletServiceTest extends TestCase
 
         $this->expectException(Exception::class);
 
-        $this->createWalletService->createWallet();
+        $this->createWalletService->execute();
     }
 
     /**
      * @test
-     * @throws Exception
      */
     public function callReturnsWalletId()
     {
@@ -56,7 +54,7 @@ class CreateWalletServiceTest extends TestCase
             ->once()
             ->andReturn($user_wallet);
 
-        $userWalletId = $this->createWalletService->createWallet();
+        $userWalletId = $this->createWalletService->execute();
 
         $this->assertEquals($wallet_id, $userWalletId);
     }

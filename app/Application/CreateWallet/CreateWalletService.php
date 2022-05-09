@@ -25,7 +25,7 @@ class CreateWalletService
      * @return string
      * @throws Exception
      */
-    public function createWallet(): string
+    public function execute(): string
     {
         $user_wallet = $this->cryptoDataStorage->createWallet();
         return $user_wallet->getWalletId();

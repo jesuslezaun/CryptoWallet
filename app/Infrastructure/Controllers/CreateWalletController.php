@@ -22,7 +22,7 @@ class CreateWalletController
     public function __invoke(): JsonResponse
     {
         try {
-            $wallet_id = $this->createWalletService->createWallet();
+            $userWalletId = $this->createWalletService->execute();
         } catch (Exception $exception) {
             return response()->json([
                 'error' => $exception->getMessage()
@@ -30,7 +30,7 @@ class CreateWalletController
         }
 
         return response()->json([
-            'wallet_id' => $wallet_id,
+            'wallet_id' => $userWalletId,
         ], Response::HTTP_OK);
     }
 }
