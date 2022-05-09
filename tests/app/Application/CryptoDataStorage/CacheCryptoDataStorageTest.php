@@ -44,4 +44,16 @@ class CacheCryptoDataStorageTest extends TestCase
 
         $this->cacheStorage->getWalletById("99");
     }
+
+    /**
+     * @test
+     */
+    public function walletWithSpecificIdFound()
+    {
+        $expectedWallet = $this->cacheStorage->createWallet();
+
+        $returnedWallet = $this->cacheStorage->getWalletById($expectedWallet->getWalletId());
+
+        $this->assertEquals($expectedWallet, $returnedWallet);
+    }
 }
