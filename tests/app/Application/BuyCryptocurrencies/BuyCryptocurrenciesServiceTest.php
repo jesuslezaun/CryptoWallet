@@ -132,8 +132,8 @@ class BuyCryptocurrenciesServiceTest extends TestCase
         $wallet = new Wallet($walletId);
         $amountUsd = 6010;
         $expectedWallet = new Wallet($walletId);
-        $coin->setAmount(1);
-        $expectedWallet->insertCoin($coin);
+        $coinNew = new Coin($coinId, "Bitcoin", "BTC", 1, 6010);
+        $expectedWallet->insertCoin($coinNew);
 
         $this->cryptoDataSource
             ->expects('findCoinById')
@@ -174,8 +174,8 @@ class BuyCryptocurrenciesServiceTest extends TestCase
         $wallet->insertCoin($coin);
         $amountUsd = 6010;
         $expectedWallet = new Wallet($walletId);
-        $coin->setAmount(11);
-        $expectedWallet->insertCoin($coin);
+        $coinNew = new Coin($coinId, "Bitcoin", "BTC", 11, 6010);
+        $expectedWallet->insertCoin($coinNew);
 
         $this->cryptoDataSource
             ->expects('findCoinById')
