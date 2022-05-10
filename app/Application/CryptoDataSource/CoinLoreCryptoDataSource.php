@@ -24,6 +24,7 @@ class CoinLoreCryptoDataSource implements CryptoDataSource
     {
         $genericCoinData = $this->getGenericCoinData($coinId);
         $coinAmount = 0;
+
         return new Coin(
             $genericCoinData[0]->id,
             $genericCoinData[0]->name,
