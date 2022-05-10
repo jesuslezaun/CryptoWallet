@@ -85,16 +85,16 @@ class SellCryptocurrenciesControllerTest extends TestCase
     {
         $this->cryptoDataSource
             ->expects('findCoinById')
-            ->with('999')
+            ->with('99')
             ->once();
 
         $this->cryptoDataStorage
             ->expects('getWalletById')
-            ->with('999')
+            ->with('99')
             ->once()
             ->andThrow(new Exception('A wallet with the specified id was not found'));
 
-        $response = $this->post('/api/coin/sell', ['coin_id' => '999', 'wallet_id' => '999', 'amount_usd' => 0]);
+        $response = $this->post('/api/coin/sell', ['coin_id' => '99', 'wallet_id' => '99', 'amount_usd' => 0]);
 
         $response
             ->assertStatus(Response::HTTP_NOT_FOUND)
