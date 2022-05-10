@@ -153,7 +153,7 @@ class SellCryptocurrenciesControllerTest extends TestCase
     public function notEnoughCoinsInWallet()
     {
         $coin = new Coin("90", "Bitcoin", "BTC", 1, 6010);
-        $wallet = new Wallet("1");
+        $wallet = new Wallet("10");
         $wallet->insertCoin($coin);
 
         $this->cryptoDataSource
@@ -163,11 +163,11 @@ class SellCryptocurrenciesControllerTest extends TestCase
             ->andReturn($coin);
         $this->cryptoDataStorage
             ->expects('getWalletById')
-            ->with('1')
+            ->with('10')
             ->once()
             ->andReturn($wallet);
 
-        $response = $this->post('/api/coin/sell', ['coin_id' => '90', 'wallet_id' => '1', 'amount_usd' => 6011]);
+        $response = $this->post('/api/coin/sell', ['coin_id' => '90', 'wallet_id' => '10', 'amount_usd' => 6011]);
 
         $response
             ->assertStatus(Response::HTTP_BAD_REQUEST)
