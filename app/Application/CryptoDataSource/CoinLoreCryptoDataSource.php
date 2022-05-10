@@ -4,6 +4,7 @@ namespace App\Application\CryptoDataSource;
 
 use App\Domain\Coin;
 use App\Domain\CoinStatus;
+use Exception;
 
 class CoinLoreCryptoDataSource implements CryptoDataSource
 {
@@ -58,6 +59,11 @@ class CoinLoreCryptoDataSource implements CryptoDataSource
         $response = curl_exec($curl);
         curl_close($curl);
 
-        return json_decode($response);
+        $decodedJson =  json_decode($response);
+        if ($decodedJson == []) {
+            throw new Exception('A coin with the specified id was not found');
+        }
+
+        return $decodedJson;
     }
 }
