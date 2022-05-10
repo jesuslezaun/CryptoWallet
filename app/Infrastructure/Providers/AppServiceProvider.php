@@ -2,6 +2,8 @@
 
 namespace App\Infrastructure\Providers;
 
+use App\Application\CryptoDataSource\CoinLoreCryptoDataSource;
+use App\Application\CryptoDataSource\CryptoDataSource;
 use App\Application\UserDataSource\UserDataSource;
 use App\DataSource\Database\EloquentUserDataSource;
 use Illuminate\Support\ServiceProvider;
@@ -25,8 +27,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-//        $this->app->bind(UserDataSource::class, function () {
-//            return new EloquentUserDataSource();
-//        });
+        $this->app->bind(CryptoDataSource::class, function () {
+            return new CoinLoreCryptoDataSource();
+        });
     }
 }
