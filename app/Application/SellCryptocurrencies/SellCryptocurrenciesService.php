@@ -42,7 +42,7 @@ class SellCryptocurrenciesService
         } else {
             $walletCoins = $wallet->getCoins();
             $amountCoin = $amountUsd / $coin->getValueUsd();
-            if($walletCoins[$index]->getAmount() < $amountCoin){
+            if ($walletCoins[$index]->getAmount() < $amountCoin) {
                 throw new Exception('No enough coins to sell');
             }
             $walletCoins[$index]

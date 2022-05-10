@@ -41,9 +41,11 @@ class SellCryptocurrenciesController
                 ], Response::HTTP_SERVICE_UNAVAILABLE);
             }
 
-            if ($exception->getMessage() == "Amount should be positive" ||
+            if (
+                $exception->getMessage() == "Amount should be positive" ||
                 $exception->getMessage() == "Coin is not in wallet"  ||
-                $exception->getMessage() == "No enough coins to sell") {
+                $exception->getMessage() == "No enough coins to sell"
+            ) {
                 return response()->json([
                     'error' => $exception->getMessage()
                 ], Response::HTTP_BAD_REQUEST);

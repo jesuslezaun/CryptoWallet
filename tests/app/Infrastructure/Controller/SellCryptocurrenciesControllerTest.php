@@ -49,11 +49,11 @@ class SellCryptocurrenciesControllerTest extends TestCase
     {
         $this->cryptoDataSource
             ->expects('findCoinById')
-            ->with('2')
+            ->with('3')
             ->once()
             ->andThrow(new Exception('Service unavailable'));
 
-        $response = $this->post('/api/coin/sell', ['coin_id' => '2', 'wallet_id' => '5', 'amount_usd' => 0]);
+        $response = $this->post('/api/coin/sell', ['coin_id' => '3', 'wallet_id' => '5', 'amount_usd' => 0]);
 
         $response
             ->assertStatus(Response::HTTP_SERVICE_UNAVAILABLE)

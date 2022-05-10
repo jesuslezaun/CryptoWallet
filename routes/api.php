@@ -45,4 +45,3 @@ Route::get('wallet/{wallet_id}/balance', WalletBalanceController::class);
 Route::post('wallet/open', CreateWalletController::class);
 
 Route::post('coin/sell', SellCryptocurrenciesController::class);
-
