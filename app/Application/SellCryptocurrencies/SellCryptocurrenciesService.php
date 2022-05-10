@@ -47,6 +47,9 @@ class SellCryptocurrenciesService
             }
             $walletCoins[$index]
                 ->setAmount($walletCoins[$index]->getAmount() - ($amountUsd / $coin->getValueUsd()));
+            if($walletCoins[$index]->getAmount() == 0){
+                unset($walletCoins[$index]);
+            }
             $wallet->setCoins($walletCoins);
         }
 

@@ -171,7 +171,7 @@ class SellCryptocurrenciesServiceTest extends TestCase
     /**
      * @test
      */
-    public function sellCoin()
+    public function coinSoldCompletely()
     {
         $coinId = "90";
         $coin = new Coin($coinId, "Bitcoin", "BTC", 1, 6010);
@@ -180,7 +180,45 @@ class SellCryptocurrenciesServiceTest extends TestCase
         $wallet->insertCoin($coin);
         $amountUsd = 6010;
         $expectedWallet = new Wallet($walletId);
-        $coinExpected = new Coin($coinId, "Bitcoin", "BTC", 0, 6010);
+
+        $this->cryptoDataSource
+            ->expects('findCoinById')
+            ->with($coinId)
+            ->once()
+            ->andReturn($coin);
+        $this->cryptoDataStorage
+            ->expects('getWalletById')
+            ->with($walletId)
+            ->once()
+            ->andReturn($wallet);
+        $this->cryptoDataStorage
+            ->expects('updateWallet')
+            ->with(\Mockery::on(function ($walletParameter) use ($expectedWallet) {
+                $coinsParameter = $walletParameter->getCoins();
+                $coinsExpected = $expectedWallet->getCoins();
+
+                return (sizeof($coinsParameter) == sizeof($coinsExpected));
+            }))
+            ->once();
+
+        $sellCryptoResponse = $this->sellCryptosService->execute($coinId, $walletId, $amountUsd);
+
+        $this->assertEmpty($sellCryptoResponse);
+    }
+
+    /**
+     * @test
+     */
+    public function sellCoin()
+    {
+        $coinId = "90";
+        $coin = new Coin($coinId, "Bitcoin", "BTC", 2, 6010);
+        $walletId = "1";
+        $wallet = new Wallet($walletId);
+        $wallet->insertCoin($coin);
+        $amountUsd = 6010;
+        $expectedWallet = new Wallet($walletId);
+        $coinExpected = new Coin($coinId, "Bitcoin", "BTC", 1, 6010);
         $expectedWallet->insertCoin($coinExpected);
 
         $this->cryptoDataSource
