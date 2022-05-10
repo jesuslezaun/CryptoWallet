@@ -23,11 +23,12 @@ class CoinLoreCryptoDataSource implements CryptoDataSource
     public function findCoinById(string $coinId): Coin
     {
         $genericCoinData = $this->getGenericCoinData($coinId);
+        $coinAmount = 0;
         return new Coin(
             $genericCoinData[0]->id,
             $genericCoinData[0]->name,
             $genericCoinData[0]->symbol,
-            0,
+            $coinAmount,
             $genericCoinData[0]->price_usd,
         );
     }
