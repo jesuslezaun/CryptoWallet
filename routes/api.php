@@ -5,6 +5,7 @@ use App\Infrastructure\Controllers\CoinStatusController;
 use App\Infrastructure\Controllers\CreateWalletController;
 use App\Infrastructure\Controllers\GetUserController;
 use App\Infrastructure\Controllers\IsEarlyAdopterUserController;
+use App\Infrastructure\Controllers\SellCryptocurrenciesController;
 use App\Infrastructure\Controllers\StatusController;
 use App\Infrastructure\Controllers\WalletBalanceController;
 use App\Infrastructure\Controllers\WalletCryptocurrenciesController;
@@ -42,4 +43,6 @@ Route::post('coin/buy', BuyCryptocurrenciesController::class);
 Route::get('wallet/{wallet_id}/balance', WalletBalanceController::class);
 
 Route::post('wallet/open', CreateWalletController::class);
+
+Route::post('coin/sell', SellCryptocurrenciesController::class);
 
