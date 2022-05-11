@@ -6,6 +6,7 @@ use App\Application\CryptoDataSource\CoinLoreCryptoDataSource;
 use App\Application\CryptoDataSource\CryptoDataSource;
 use App\Domain\Coin;
 use App\Domain\CoinStatus;
+use Exception;
 use PHPUnit\Framework\TestCase;
 
 class CoinLoreCryptoDataSourceTest extends TestCase
@@ -59,5 +60,15 @@ class CoinLoreCryptoDataSourceTest extends TestCase
         $btcPrice = $this->clCryptoDataSource->getCoinUsdValueById("90");
 
         $this->assertIsFloat($btcPrice);
+    }
+
+    /**
+     * @test
+     */
+    public function coinNotFoundForGivenId()
+    {
+        $this->expectException(Exception::class);
+
+        $response = $this->clCryptoDataSource->getCoinUsdValueById("-10");
     }
 }
